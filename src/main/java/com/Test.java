@@ -35,7 +35,7 @@ public class Test {
 		Function<Integer, String> srvToCall = new DummyWebSrv()::getStudentName;//This one accept Integer and returns String
 		//Function - Just like we store primitive values/objects we can now store functions in a variable and pass it as argument
 		System.out.println(srvToCall.apply(10));
-		
+		Function<Integer, String> srvToCall8 = (i) ->  new DummyWebSrv().getStudentName(i);//Another way of using function
 		
 		Predicate<Integer> noGreaterThan5 =  x -> x > 5; //Just like Function but always returns boolean
 		System.out.println("10 > 5 ?"+noGreaterThan5.test(10));
@@ -58,7 +58,9 @@ public class Test {
 		 * Comparator interface in java
 		 ***************/
 		
-		Calculator<Double> myCalc = ( a, b) -> a+b; 
+		Calculator<Double> myCalc = ( a, b) -> a +a + b; 
+		System.out.println("Special type of Adding "+abc(myCalc));//ABC is expecting implementation class for "Calculator<Double>" which is a functional interface
+		//Here we are creating an class that extends Calculator (line #61 just above it), create object of that and send that object to  "abc" method
 		
 		/************************
 		 * *********Stream
@@ -74,11 +76,11 @@ public class Test {
 		//For Each
 		list.stream().forEach( p -> System.out.println(p.getFirstName()) );
 		
-		//Find first
+		//Find first - returns optional
 		Optional<PersonVO> firstPerson =  list.stream().filter(v -> v.getAge() <100).findFirst();
 		person = firstPerson.orElse(dummy);
 		
-		//Any match
+		//Any match - returns boolean
 		list.stream().anyMatch(p -> p.getFirstName().equalsIgnoreCase("sandeep"));
 		
 		//IntSummaryStatistics
@@ -90,6 +92,9 @@ public class Test {
 	
 	}
 
+	public static double abc(final Calculator<Double> myCalc) {
+		return myCalc.add(10d, 3d);
+	}
 	
 	/* This defines R and T*/ 
 	public <T, R> R timeItAndExecure(Supplier<R> methodToExecute, String methodName) {
